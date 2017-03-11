@@ -822,6 +822,23 @@ public class FiveCardDrawTest {
     }
 
     @Test
+    public void play_TwoPairVsTwoPairFullTie() throws Exception {
+        Hand hand1 = new Hand();
+        hand1.addCard(new Card(Card.SUIT_SPADES, Card.CARD_3));
+        hand1.addCard(new Card(Card.SUIT_HEARTS, Card.CARD_3));
+        hand1.addCard(new Card(Card.SUIT_DIAMONDS, Card.CARD_4));
+        hand1.addCard(new Card(Card.SUIT_HEARTS, Card.CARD_4));
+        hand1.addCard(new Card(Card.SUIT_DIAMONDS, Card.CARD_QUEEN));
+        Hand hand2 = new Hand();
+        hand2.addCard(new Card(Card.SUIT_DIAMONDS, Card.CARD_3));
+        hand2.addCard(new Card(Card.SUIT_CLUBS, Card.CARD_3));
+        hand2.addCard(new Card(Card.SUIT_CLUBS, Card.CARD_4));
+        hand2.addCard(new Card(Card.SUIT_SPADES, Card.CARD_4));
+        hand2.addCard(new Card(Card.SUIT_CLUBS, Card.CARD_QUEEN));
+        assertEquals(null, FiveCardDraw.play(hand1, hand2));
+    }
+
+    @Test
     public void play_TwoPairVsTwoPairTieHighPair() throws Exception {
         Hand hand1 = new Hand();
         hand1.addCard(new Card(Card.SUIT_SPADES, Card.CARD_2));

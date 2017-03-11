@@ -21,15 +21,15 @@ public class Hand {
     private static final Map<Integer, String> names = generateNameMap();
     private static Map<Integer, String> generateNameMap() {
         Map<Integer, String> hm = new HashMap<>();
-        hm.put(HAND_STRAIGHT_FLUSH, "Straight Flush ("+HAND_STRAIGHT_FLUSH+")");
-        hm.put(HAND_FOUR_OF_A_KIND, "Four of a Kind ("+HAND_FOUR_OF_A_KIND+")");
-        hm.put(HAND_FULL_HOUSE, "Full House ("+HAND_FULL_HOUSE+")");
-        hm.put(HAND_FLUSH, "Full House ("+HAND_FLUSH+")");
-        hm.put(HAND_STRAIGHT, "Full House ("+HAND_STRAIGHT+")");
-        hm.put(HAND_THREE_OF_A_KIND, "Full House ("+HAND_THREE_OF_A_KIND+")");
-        hm.put(HAND_TWO_PAIR, "Full House ("+HAND_TWO_PAIR+")");
-        hm.put(HAND_ONE_PAIR, "Full House ("+HAND_ONE_PAIR+")");
-        hm.put(HAND_HIGH_CARD, "Full House ("+HAND_HIGH_CARD+")");
+        hm.put(HAND_STRAIGHT_FLUSH, "Straight Flush");
+        hm.put(HAND_FOUR_OF_A_KIND, "Four of a Kind");
+        hm.put(HAND_FULL_HOUSE, "Full House");
+        hm.put(HAND_FLUSH, "Flush");
+        hm.put(HAND_STRAIGHT, "Straight");
+        hm.put(HAND_THREE_OF_A_KIND, "Three of a Kind");
+        hm.put(HAND_TWO_PAIR, "Two Pair");
+        hm.put(HAND_ONE_PAIR, "One Pair");
+        hm.put(HAND_HIGH_CARD, "High Card");
         return hm;
     }
 
