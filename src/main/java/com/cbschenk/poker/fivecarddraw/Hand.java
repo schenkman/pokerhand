@@ -261,7 +261,6 @@ public class Hand {
             int index = 0;
             for(Card card : cards) {
                 int value = card.value << (index * 4);
-//            System.out.println(String.format(" %3s value %24s", card, Integer.toBinaryString(value)));
                 rank += value;
                 index += 1;
             }
@@ -273,14 +272,14 @@ public class Hand {
             int remainingCardValue = cards.stream()
                     .filter(c -> c.value != firstPairValue && c.value != secondPairValue)
                     .findFirst().get().value;
+            //First pair value, second pair value, and remaining card value
             rank += (secondPairValue << 16) +
                     (firstPairValue << 12) +
                     (remainingCardValue << 8);
-//            System.out.println(String.format(" %3s value %24s", this, Integer.toBinaryString(rank)));
         } else { //if (handType == HAND_ONE_PAIR)
             int firstPairValue = getFirstPairCard().value;
             rank += firstPairValue << 16;
-            //Add in other three card values
+            //Add in other remaining three card values highest first
             int index = 0;
             for(Card card : cards) {
                 if (card.value == firstPairValue) {
