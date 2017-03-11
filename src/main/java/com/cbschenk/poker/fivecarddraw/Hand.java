@@ -232,9 +232,9 @@ public class Hand {
      *                            nnnn  nnnn nnnn nnnn nnnn nnnn
      *   4) Three of a Kind   4   0011  c3v
      *                            nnnn  nnnn
-     *   3) Two Pair         18   0010  hpv  lpv  rcv
+     *   3) Two Pair         16   0010  hpv  lpv  rcv
      *                            nnnn  nnnn nnnn nnnn
-     *   2) One Pair         22   0001  lpv  rc3v rc2v rc1v
+     *   2) One Pair         20   0001  lpv  rc3v rc2v rc1v
      *                            nnnn  nnnn nnnn nnnn nnnn
      *   1) High Card        24   0000  c5v  c4v  c3v  c2v  c1v
      *                            nnnn  nnnn nnnn nnnn nnnn nnnn
