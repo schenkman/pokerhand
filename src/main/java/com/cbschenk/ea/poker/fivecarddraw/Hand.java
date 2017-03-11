@@ -2,6 +2,8 @@ package com.cbschenk.ea.poker.fivecarddraw;
 
 import com.cbschenk.ea.poker.Card;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
@@ -16,14 +18,38 @@ public class Hand {
     public static final int HAND_ONE_PAIR = 1;
     public static final int HAND_HIGH_CARD = 0;
 
+    private static final Map<Integer, String> names = generateNameMap();
+    private static Map<Integer, String> generateNameMap() {
+        Map<Integer, String> hm = new HashMap<>();
+        hm.put(HAND_STRAIGHT_FLUSH, "Straight Flush ("+HAND_STRAIGHT_FLUSH+")");
+        hm.put(HAND_FOUR_OF_A_KIND, "Four of a Kind ("+HAND_FOUR_OF_A_KIND+")");
+        hm.put(HAND_FULL_HOUSE, "Full House ("+HAND_FULL_HOUSE+")");
+        hm.put(HAND_FLUSH, "Full House ("+HAND_FLUSH+")");
+        hm.put(HAND_STRAIGHT, "Full House ("+HAND_STRAIGHT+")");
+        hm.put(HAND_THREE_OF_A_KIND, "Full House ("+HAND_THREE_OF_A_KIND+")");
+        hm.put(HAND_TWO_PAIR, "Full House ("+HAND_TWO_PAIR+")");
+        hm.put(HAND_ONE_PAIR, "Full House ("+HAND_ONE_PAIR+")");
+        hm.put(HAND_HIGH_CARD, "Full House ("+HAND_HIGH_CARD+")");
+        return hm;
+    }
+
     private NavigableSet<Card> cards = new TreeSet<>();
 
+    private int rank = 0;
+    private int handType = 0;
     private Card firstPairCard = null;
     private Card secondPairCard = null;
     private Card threeOfAKindCard = null;
     private Card fourOfAKindCard = null;
     private Card fourOfAKindOffCard = null;
     private Card highCard = null;
+
+    public int getRank() {
+        return rank;
+    }
+    public int getHandType() {
+        return handType;
+    }
 
     public Card getFirstPairCard() {
         return firstPairCard;
@@ -55,6 +81,10 @@ public class Hand {
             throw new IllegalArgumentException(String.format("Card %s already present in hand %s", card, this));
         }
         cards.add(card);
+        //Compute our rank if we have a full hand
+        if (cards.size() == 5) {
+            computeRank();
+        }
     }
 
     /**
@@ -72,7 +102,7 @@ public class Hand {
      * High card - high card
      * @return int representing the top-level hand type
      */
-    public int getHandType() {
+    private int computeHandType() {
         int curHandType = HAND_HIGH_CARD;
 
         int flushRun = 0;
@@ -212,10 +242,10 @@ public class Hand {
      * In summary, our max encoding length is 24 bits long, which fits into a regular ol' integer.
      * @return Encoded form of the hand in binary format as an int
      */
-    public int getRank() {
-        int handType = getHandType();
+    private int computeRank() {
+        this.handType = computeHandType();
         //Start our rank with the hand type shifted into position
-        int rank = handType << 20;
+        this.rank = handType << 20;
 
         if(handType == HAND_STRAIGHT_FLUSH) {
             //Compare max card value
@@ -275,7 +305,7 @@ public class Hand {
         return cards.stream()
                 .map(s -> s.toString())
                 .reduce((str1, str2) -> str1 + ' ' + str2)
-                .get();
+                .get() + " - " + names.get(getHandType());
     }
 
 }
