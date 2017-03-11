@@ -1,8 +1,6 @@
-package com.cbschenk.ea.poker.games;
+package com.cbschenk.poker.fivecarddraw;
 
-import com.cbschenk.ea.poker.Card;
-import com.cbschenk.ea.poker.fivecarddraw.FiveCardDraw;
-import com.cbschenk.ea.poker.fivecarddraw.Hand;
+import com.cbschenk.poker.Card;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

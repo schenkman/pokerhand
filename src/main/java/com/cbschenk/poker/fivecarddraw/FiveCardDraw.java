@@ -1,4 +1,4 @@
-package com.cbschenk.ea.poker.fivecarddraw;
+package com.cbschenk.poker.fivecarddraw;
 
 public class FiveCardDraw {
 

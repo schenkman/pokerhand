@@ -1,4 +1,4 @@
-package com.cbschenk.ea.poker;
+package com.cbschenk.poker;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,6 @@
-package com.cbschenk.ea.poker.fivecarddraw;
+package com.cbschenk.poker.fivecarddraw;
 
-import com.cbschenk.ea.poker.Card;
+import com.cbschenk.poker.Card;
 
 import java.util.HashMap;
 import java.util.Map;

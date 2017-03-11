@@ -1,4 +1,4 @@
-package com.cbschenk.ea;
+package com.cbschenk;
 
 /**
  * Hello world!
