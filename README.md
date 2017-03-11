@@ -89,13 +89,13 @@ Once computed, a simple integer comparison is all that is required to determine 
 
 ## Time and Space Considerations
 
-* N inserts into the Hand (TreeSet) are worst-case `O(n**2)` time as is standard for a binary search tree,
-but we're only dealing with 5 cards.
+* N inserts into the Hand (TreeSet) in the average case are `O(nlog n)` (worst case is `O(n**2)` if the cards are
+pre-sorted but we're only dealing with 5 cards).
 * Computing the hand type is `O(n)` as the code iterates over each card only once. Constant space is required
 to save the last card seen and a few other interesting values depending on the hand type (See private Card
 members on [Hand](/src/main/java/com/cbschenk/poker/fivecarddraw/Hand.java)).
 * Computing the rank either requires `O(n)` or `O(1)` time depending on the hand type, so the algorithm
-overall runs in `O(n)` time and space.
+overall runs in `O(n)` time and space once the cards are sorted.
 
 
 # License

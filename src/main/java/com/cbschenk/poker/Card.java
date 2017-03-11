@@ -46,18 +46,10 @@ public class Card implements Comparable<Card> {
     }
     private static Map<Integer, String> generateSuitMap() {
         Map<Integer, String> hm = new HashMap<>();
-//        hm.put(0, "\u2660"); //Spade
-//        hm.put(1, "\u2665"); //Heart
-//        hm.put(2, "\u2666"); //Diamond
-//        hm.put(3, "\u2667"); //Club
         hm.put(0, "S");
         hm.put(1, "H");
         hm.put(2, "D");
         hm.put(3, "C");
-//        hm.put(0, "Spades");
-//        hm.put(1, "Hearts");
-//        hm.put(2, "Diamonds");
-//        hm.put(3, "Clubs");
         return hm;
     }
 
