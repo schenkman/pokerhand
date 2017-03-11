@@ -4,7 +4,7 @@ This code compares two 5 card draw poker hands together to determine a win/loss 
 
 1. A single 52-card deck, so that means no one can have the same three or four-of-a-kind
 2. Aces are not allowed as a low card
-3. Ties are allows as no tie-breakers are done with suits
+3. Ties are allowed after some reasonable attempts at tie-breaking (suits are not used)
 
 # Run it
 
@@ -78,7 +78,7 @@ Cases are as follows:
 In summary, our max encoding length is 24 bits long, which fits into an integer.
 
 Once computed, a simple integer comparison is all that is required to determine a winner or a loser or a tie
-(See class [FiveCardDraw](src/main/java/com/cbschenk/poker/fivecarddraw/FiveCardDraw.java)).
+(See class [FiveCardDraw](src/main/java/com/cbschenk/poker/fivecarddraw/FiveCardDraw.java#L7-L19)).
 
 ## Time and Space Considerations
 
