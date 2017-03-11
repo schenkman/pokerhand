@@ -5,6 +5,7 @@ This code compares two 5 card draw poker hands together to determine a win/loss 
 1. A single 52-card deck, so that means no one can have the same three or four-of-a-kind
 2. Aces are not allowed as a low card
 3. Ties are allowed after some reasonable attempts at tie-breaking (suits are not used)
+4. No wildcards/jokers
 
 # Run it
 
@@ -20,11 +21,13 @@ mvn exec:java -q -Dexec.mainClass="com.cbschenk.poker.fivecarddraw.FiveCardDraw"
 ## Tests
 
 [FiveCardDrawTest.java](src/test/java/com/cbschenk/poker/fivecarddraw/FiveCardDrawTest.java) contains all of the
-"acceptance" tests which plays each hand type against one another, resulting in roughly `n(n-1)/2` games,
-and I also include some edge cases for my own sake (i.e. where a three-of-a-kind appears in the sorted hand).
+"acceptance" tests which plays each hand type against one another, resulting in roughly 45 games
+(`n(n+1)/2` where `n` is 9 types of hands), and I also include some edge cases for my own sake
+(i.e. end-of-loop counting, tie-breaker cases, etc.).
 
-Additional unit tests for my own uses are under
-[com.cbschenk.poker.fivecarddraw](src/test/java/com/cbschenk/poker/fivecarddraw).
+[HandTest.java](src/test/java/com/cbschenk/poker/fivecarddraw/HandTest.java) verifies the bit encodings for hands as well as the hand types.
+
+[CardTest.java](src/test/java/com/cbschenk/poker/CardTest.java) verifies the comparator created for sorting in the TreeMap.
 
 
 # Process
@@ -55,6 +58,10 @@ Cases are as follows:
   - 'hp'/'lp' is high pair/low pair
   - 'rc' is remaining card
   - 'v' is value (4 bits)
+  E.g. 'c5v' is 'card 5 value'
+       'lpv' is 'low-pair value'
+       'rc1v' is 'remaining card 1 value' (least-significant)
+  
          Hand        Bits  Type  Tie Breaker values
   9) Straight Flush   10   1000  c5v
                            nnnn  nnnn
