@@ -91,15 +91,23 @@ public class Hand {
      * Computes the hand type for the given cards while also tracking pertinent
      * information as instance attributes for each type of hand.
      *
-     * Straight flush - high card
-     * Four of a kind - one of four of a kind card
-     * Full house - one of three of a kind card
-     * Flush - high card
-     * Straight - n/a
-     * Three of a kind - one of three of a kind card
-     * Two pair - one card of both pairs
-     * One pair - one card of pair
-     * High card - high card
+     * The method tracks the following while visiting each card in order:
+     *   1. N-of-a-Kind runs (kindRun)
+     *   2. Straight runs (straightRun)
+     *   3. Flush runs (flushRun)
+     *   4. High Card value
+     *   5. Values (Cards) for pairs and N-of-a-Kind hands detected
+     *
+     * The different types of hands require different information tracked:
+     *   - Straight flush - high card
+     *   - Four of a kind - one of four of a kind card
+     *   - Full house - one of three of a kind card
+     *   - Flush - high card
+     *   - Straight - n/a
+     *   - Three of a kind - one of three of a kind card
+     *   - Two pair - one card of both pairs
+     *   - One pair - one card of pair
+     *   - High card - high card
      * @return int representing the top-level hand type
      */
     private int computeHandType() {
@@ -110,7 +118,7 @@ public class Hand {
         int kindRun = 0;
         Card lastCard = null;
 
-        //Iterate over each card and build the hand, high-card, and suit rankings
+        //Iterate over each card and build the hand, high-card, etc.
         for(Card card : cards) {
             //if this is the first card we see, we're starting everything
             if(lastCard == null) {
@@ -251,22 +259,32 @@ public class Hand {
             //Compare max card value
             rank += getHighCard().value << 16;
         } else if (handType == HAND_FOUR_OF_A_KIND) {
+            //Since we're only handling a single deck, no one can have the same four-of-a-kind
+            //so we need only compare the card value to break a tie
             rank += getFourOfAKindCard().value << 16;
-        } else if (handType == HAND_FULL_HOUSE) {
+        } else if (handType == HAND_FULL_HOUSE
+                || handType == HAND_THREE_OF_A_KIND) {
+            //Both Full House and Three of a Kind have three cards (duh)
+            //and in a single deck they cannot share the same value
+            //so we need only compare the three-of-a-kind value to break a tie
+            //since it's always better than the pair
             rank += getThreeOfAKindCard().value << 16;
         } else if (handType == HAND_FLUSH
                 || handType == HAND_STRAIGHT
                 || handType == HAND_HIGH_CARD) {
-            //Add all five card values shifted appropriately
+            //Flush, Straight and High Card are all broken by iterating over the card values
+            //from highest-to-lowest to break a tie (and require the most bits)
+            //Add all five card values shifted appropriately from most-to-least significant
             int index = 0;
             for(Card card : cards) {
                 int value = card.value << (index * 4);
                 rank += value;
                 index += 1;
             }
-        } else if (handType == HAND_THREE_OF_A_KIND) {
-            rank += getThreeOfAKindCard().value << 16;
         } else if (handType == HAND_TWO_PAIR) {
+            //It's possible for two Two Pair hands to have the same pair values
+            //Generally tie breaks on two pair go first to the high pair value
+            //followed by low pair value, and then finally the remaining card
             int firstPairValue = getFirstPairCard().value;
             int secondPairValue = getSecondPairCard().value;
             int remainingCardValue = cards.stream()
@@ -277,6 +295,8 @@ public class Hand {
                     (firstPairValue << 12) +
                     (remainingCardValue << 8);
         } else { //if (handType == HAND_ONE_PAIR)
+            //Last case is the One Pair, which tie breaks first on the pair value
+            //and then the remaining three cards from most-to-least significant
             int firstPairValue = getFirstPairCard().value;
             rank += firstPairValue << 16;
             //Add in other remaining three card values highest first
