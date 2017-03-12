@@ -13,6 +13,7 @@ This is a Java 1.8, Maven 3.2 project, so clone, install your maven dependencies
 
 ```bash
 git clone git@github.com:schenkman/pokerhand.git
+cd pokerhand
 mvn install
 mvn -q clean test
 mvn exec:java -q -Dexec.mainClass="com.cbschenk.poker.fivecarddraw.FiveCardDraw"
@@ -63,29 +64,61 @@ Cases are as follows:
        'rc1v' is 'remaining card 1 value' (least-significant)
   
          Hand        Bits  Type  Tie Breaker values
-  9) Straight Flush   10   1000  c5v
+  8) Straight Flush   10   1000  c5v
                            nnnn  nnnn
-  8) Four of a Kind    8   0111  c4v
+  7) Four of a Kind    8   0111  c4v
                            nnnn  nnnn
-  7) Full House        8   0110  c3v
+  6) Full House        8   0110  c3v
                            nnnn  nnnn
-  6) Flush            24   0101  c5v  c4v  c3v  c2v  c1v
+  5) Flush            24   0101  c5v  c4v  c3v  c2v  c1v
                            nnnn  nnnn nnnn nnnn nnnn nnnn
-  5) Straight         24   0100  c5v  c4v  c3v  c2v  c1v
+  4) Straight         24   0100  c5v  c4v  c3v  c2v  c1v
                            nnnn  nnnn nnnn nnnn nnnn nnnn
-  4) Three of a Kind   4   0011  c3v
+  3) Three of a Kind   4   0011  c3v
                            nnnn  nnnn
-  3) Two Pair         16   0010  hpv  lpv  rcv
+  2) Two Pair         16   0010  hpv  lpv  rcv
                            nnnn  nnnn nnnn nnnn
-  2) One Pair         20   0001  lpv  rc3v rc2v rc1v
+  1) One Pair         20   0001  lpv  rc3v rc2v rc1v
                            nnnn  nnnn nnnn nnnn nnnn
-  1) High Card        24   0000  c5v  c4v  c3v  c2v  c1v
+  0) High Card        24   0000  c5v  c4v  c3v  c2v  c1v
                            nnnn  nnnn nnnn nnnn nnnn nnnn
 ```
 In summary, our max encoding length is 24 bits long, which fits into an integer.
 
 Once computed, a simple integer comparison is all that is required to determine a winner or a loser or a tie
 (See class [FiveCardDraw](src/main/java/com/cbschenk/poker/fivecarddraw/FiveCardDraw.java#L7-L19)).
+
+In the examples below, you can see how the card values map to the tie-breaker values in the encoded representation.
+
+### Example - Straight Flush vs Four of a Kind
+
+```
+ Result       Cards              Hand          Integer   Hand   Tie Breaker
+                                                           8    6    0    0    0    0 
+  WIN   2D  3D  4D  5D  6D - Straight Flush     8781824  1000 0110 0000 0000 0000 0000
+        2C 10S 10H 10D 10C - Four of a Kind     7995392  0111 1010 0000 0000 0000 0000
+                                                           7   10    0    0    0    0 
+```
+
+### Example - Flush vs Flush (second-lowest card position wins)
+
+```
+ Result       Cards              Hand          Integer   Hand   Tie Breaker
+                                                           5   13    9    8    5    3 
+  WIN   3H  5H  8H  9H  KH - Flush              6133843  0101 1101 1001 1000 0101 0011
+        3C  4C  8C  9C  KC - Flush              6133827  0101 1101 1001 1000 0100 0011
+                                                           5   13    9    8    4    3 
+```
+
+### Example - One Pair vs High Card
+
+```
+ Result       Cards              Hand          Integer   Hand   Tie Breaker
+                                                           1    8   10    9    7    0 
+  WIN   7D  8S  8H  9H 10D - One Pair           1616240  0001 1000 1010 1001 0111 0000
+        3C  6S  7H  9D  AH - High Card           956259  0000 1110 1001 0111 0110 0011
+                                                           0   14    9    7    6    3 
+```
 
 ## Time and Space Considerations
 

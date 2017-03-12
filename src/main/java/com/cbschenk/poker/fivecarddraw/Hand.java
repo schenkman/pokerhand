@@ -50,6 +50,9 @@ public class Hand {
     public int getHandType() {
         return handType;
     }
+    public String getHandName() {
+        return names.get(getHandType());
+    }
 
     public Card getFirstPairCard() {
         return firstPairCard;
@@ -321,10 +324,19 @@ public class Hand {
      */
     @Override
     public String toString() {
+        return getFormattedCards() + " - " + getHandName();
+    }
+
+    /**
+     * Formats card values and suits in a single string
+     * i.e.  3H  4C  5D  6D 10S
+     * @return String of card values and suits
+     */
+    public String getFormattedCards() {
         return cards.stream()
                 .map(s -> s.toString())
                 .reduce((str1, str2) -> str1 + ' ' + str2)
-                .get() + " - " + names.get(getHandType());
+                .get();
     }
 
 }
