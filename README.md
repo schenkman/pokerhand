@@ -89,6 +89,7 @@ Once computed, a simple integer comparison is all that is required to determine 
 (See class [FiveCardDraw](src/main/java/com/cbschenk/poker/fivecarddraw/FiveCardDraw.java#L7-L19)).
 
 In the examples below, you can see how the card values map to the tie-breaker values in the encoded representation.
+Note that `11 == Jack`, `12 == Queen`, `13 == King`, and `14 == Ace`.
 
 ### Example - Straight Flush vs Four of a Kind
 
