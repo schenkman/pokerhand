@@ -19,6 +19,18 @@ mvn -q clean test
 mvn exec:java -q -Dexec.mainClass="com.cbschenk.poker.fivecarddraw.FiveCardDraw"
 ```
 
+## Code
+
+[Hand.java](src/main/java/com/cbschenk/poker/fivecarddraw/Hand.java) contains all of the interesting code.
+When 5 cards are reached in `addCard`, `computeRank` is automatically called, which first calls `computeHand`
+and all tie-breaker values are generated as well. Once a hand is given out, it's value is static and can be
+trivially compared to any other hand as an integer.
+
+[Card.java](src/main/java/com/cbschenk/poker/Card.java) represents a card which has a value and a suit.
+
+[FiveCardDraw.java](src/main/java/com/cbschenk/poker/fivecarddraw/FiveCardDraw.java) contains our `main` and
+`play` methods and runs some examples with nice output to explain the hand encodings.
+
 ## Tests
 
 [FiveCardDrawTest.java](src/test/java/com/cbschenk/poker/fivecarddraw/FiveCardDrawTest.java) contains all of the
@@ -47,8 +59,8 @@ The algorithm generates a bit encoding representing the hand as well as any pert
 perform tie-breakers when facing an equivalent hand from your opponent. Encodings are generated in the Hand
 as soon as 5 cards are available. The breakdown of bits required for each hand type is as follows:
 
-* Hands - 9 types encoded in 4 bits
-* Cards - 13 values encoded in 4 bits
+* Hands - 9 types encoded in 4 bits (8 to 0, listed below)
+* Cards - 13 values encoded in 4 bits (14 or Ace to 2)
 
 Hands are encoded to the most-significant bits and tie-breakers are handled in the least-significant bits.
 Tie-breakers only matter when battling a hand of the same type.
@@ -111,25 +123,35 @@ Note that `11 == Jack`, `12 == Queen`, `13 == King`, and `14 == Ace`.
                                                            5   13    9    8    4    3 
 ```
 
-### Example - One Pair vs High Card
+### Example - High Card vs One Pair
 
 ```
  Result       Cards              Hand          Integer   Hand   Tie Breaker
-                                                           1    8   10    9    7    0 
-  WIN   7D  8S  8H  9H 10D - One Pair           1616240  0001 1000 1010 1001 0111 0000
-        3C  6S  7H  9D  AH - High Card           956259  0000 1110 1001 0111 0110 0011
                                                            0   14    9    7    6    3 
+        3C  6S  7H  9D  AH - High Card           956259  0000 1110 1001 0111 0110 0011
+  WIN   7D  8S  8H  9H 10D - One Pair           1616240  0001 1000 1010 1001 0111 0000
+                                                           1    8   10    9    7    0 
+```
+
+### Example - Two Pair vs Two Pair (Tie)
+
+```
+ Result       Cards              Hand          Integer   Hand   Tie Breaker
+                                                           2    9    8   10    0    0  
+  TIE   8S  8C  9S  9C 10S - Two Pair           2722304  0010 1001 1000 1010 0000 0000 
+  TIE   8H  8D  9H  9D 10D - Two Pair           2722304  0010 1001 1000 1010 0000 0000 
+                                                           2    9    8   10    0    0  
 ```
 
 ## Time and Space Considerations
 
-* N inserts into the Hand (TreeSet) in the average case are `O(nlog n)` (worst case is `O(n**2)` if the cards are
-pre-sorted but we're only dealing with 5 cards).
-* Computing the hand type is `O(n)` as the code iterates over each card only once. Constant space is required
-to save the last card seen and a few other interesting values depending on the hand type (See private Card
-members on [Hand](/src/main/java/com/cbschenk/poker/fivecarddraw/Hand.java)).
-* Computing the rank either requires `O(n)` or `O(1)` time depending on the hand type, so the algorithm
-overall runs in `O(n)` time and space once the cards are sorted.
+* N inserts into the Hand (TreeSet) in the average case are `O(klog k)` where `k` is the number of cards in the hand.
+* Computing the hand type is `O(k)` where the code iterates over each card only once.
+Constant space is required to save the last card seen and a few other interesting values depending on the hand type
+(See private Card members on [Hand](/src/main/java/com/cbschenk/poker/fivecarddraw/Hand.java#L40-L45)).
+* Computing the rank after determining the hand type would normally either require an additional `O(k)` or `O(1)` time
+depending on the hand type, however since we have a fixed number of cards per hand (5), the algorithm overall is `O(1)` constant time
+once the cards are sorted.
 
 
 # License
